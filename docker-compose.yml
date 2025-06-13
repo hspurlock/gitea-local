@@ -14,7 +14,7 @@ services:
       - GITEA__database__PASSWD=gitea
     restart: always
     volumes:
-      - ./my-cert.pem:/etc/ssl/certs/my-cert.pem:ro
+      - ./my-cert.pem:/usr/share/ca-certificates/my-cert.pem:ro
       - ./gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
