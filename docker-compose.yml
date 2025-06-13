@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   gitea:
     image: gitea/gitea:latest
@@ -23,7 +21,7 @@ services:
       - "2222:2222"
     depends_on:
       - db
-    command: sh -c "update-ca-certificates && /usr/bin/entrypoint /bin/s6-svscan /etc/s6"
+    command: sh -c "update-ca-certificates && exec /usr/bin/entrypoint"
     networks:
       - gitea_net
 
