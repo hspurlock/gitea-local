@@ -23,6 +23,7 @@ services:
       - "2222:2222"
     depends_on:
       - db
+    command: sh -c "update-ca-certificates && /usr/bin/entrypoint /bin/s6-svscan /etc/s6"
     networks:
       - gitea_net
 
