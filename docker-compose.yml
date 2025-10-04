@@ -36,11 +36,11 @@ services:
     restart: always
     volumes:
       - ./runner:/data
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /run/podman/podman.sock:/var/run/docker.sock
     environment:
       - GITEA_INSTANCE_URL=https://gitea:3000
       - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_TOKEN}
-      - GITEA_RUNNER_NAME=docker-runner
+      - GITEA_RUNNER_NAME=podman-runner
     depends_on:
       - gitea
     networks:
@@ -65,4 +65,3 @@ volumes:
 
 networks:
   gitea_net:
-    driver: bridge
