@@ -58,17 +58,23 @@ To enable CI/CD with Gitea Actions, you need to register the runner:
 2.  **Generate a runner registration token:**
     Navigate to `Site Administration` → `Actions` → `Runners` and click "Create new Runner". Copy the registration token.
 
-3.  **Set the token as an environment variable:**
+3.  **Create a `.env` file with the token:**
     ```bash
-    export GITEA_RUNNER_TOKEN="your-registration-token-here"
+    cp .env.example .env
+    ```
+
+    Edit `.env` and replace `your_registration_token_here` with your actual token:
+    ```
+    GITEA_RUNNER_TOKEN=your-actual-token-here
     ```
 
 4.  **Restart the services:**
     ```bash
+    podman-compose down
     podman-compose up -d
     ```
 
-The runner will automatically register and start accepting jobs.
+The runner will automatically register and start accepting jobs. The runner is configured to trust the self-signed certificate used by Gitea.
 
 ## Data Persistence
 
