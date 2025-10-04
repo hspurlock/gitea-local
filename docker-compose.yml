@@ -10,18 +10,39 @@ services:
       - GITEA__database__NAME=gitea
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=gitea
+      - GITEA__server__PROTOCOL=https
+      - GITEA__server__CERT_FILE=/data/gitea/cert.pem
+      - GITEA__server__KEY_FILE=/data/gitea/key.pem
+      - GITEA__server__DOMAIN=localhost
+      - GITEA__server__ROOT_URL=https://localhost:3000/
+      - GITEA__server__DISABLE_SSH=true
     restart: always
     volumes:
-      - ./my-cert.pem:/usr/local/share/ca-certificates/my-cert.pem:ro
+      - ./cert.pem:/data/gitea/cert.pem:ro
+      - ./key.pem:/data/gitea/key.pem:ro
       - ./gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
-      - "2222:2222"
     depends_on:
       - db
-    command: sh -c "update-ca-certificates && exec /usr/bin/entrypoint"
+    networks:
+      - gitea_net
+
+  runner:
+    image: gitea/act_runner:latest
+    container_name: gitea_runner
+    restart: always
+    volumes:
+      - ./runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - GITEA_INSTANCE_URL=https://gitea:3000
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_TOKEN}
+      - GITEA_RUNNER_NAME=docker-runner
+    depends_on:
+      - gitea
     networks:
       - gitea_net
 

@@ -1,6 +1,6 @@
 # Local Gitea Setup with Docker Compose
 
-This setup runs Gitea with a PostgreSQL database.
+This setup runs Gitea with HTTPS enabled and a PostgreSQL database.
 
 ## Prerequisites
 
@@ -16,15 +16,22 @@ This setup runs Gitea with a PostgreSQL database.
     cd gitea-local
     ```
 
-3.  **Start the services:**
+3.  **Generate SSL certificates (if you don't have them):**
+    ```bash
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
+    ```
+
+4.  **Start the services:**
     ```bash
     docker-compose up -d
     ```
 
-4.  **Access Gitea:**
-    Open your web browser and go to [http://localhost:3000](http://localhost:3000).
+5.  **Access Gitea:**
+    Open your web browser and go to [https://localhost:3000](https://localhost:3000).
 
-5.  **Initial Configuration:**
+    **Note:** You may see a browser warning about the self-signed certificate. This is expected and safe for local development.
+
+6.  **Initial Configuration:**
     On the first visit, Gitea will present an installation page.
     -   **Database Type:** Select `PostgreSQL`.
     -   **Host:** `db:5432`
@@ -33,16 +40,37 @@ This setup runs Gitea with a PostgreSQL database.
     -   **Database Name:** `gitea`
     -   **Application General Settings:**
         -   **Site Title:** Your desired title (e.g., "Local Gitea")
-        -   **Gitea Base URL:** `http://localhost:3000/`
-        -   **SSH Server Domain:** `localhost` (if using SSH on port 2222, ensure this is correct or use the server's IP if accessing from other machines)
-        -   **SSH Port:** `2222` (as mapped in `docker-compose.yml`)
+        -   **Gitea Base URL:** `https://localhost:3000/`
     -   Fill in the administrator account settings.
     -   Click "Install Gitea".
+
+## Setting up Gitea Actions Runner
+
+To enable CI/CD with Gitea Actions, you need to register the runner:
+
+1.  **Access Gitea admin panel:**
+    Go to `https://localhost:3000` and log in as administrator.
+
+2.  **Generate a runner registration token:**
+    Navigate to `Site Administration` → `Actions` → `Runners` and click "Create new Runner". Copy the registration token.
+
+3.  **Set the token as an environment variable:**
+    ```bash
+    export GITEA_RUNNER_TOKEN="your-registration-token-here"
+    ```
+
+4.  **Restart the services:**
+    ```bash
+    docker-compose up -d
+    ```
+
+The runner will automatically register and start accepting jobs.
 
 ## Data Persistence
 
 -   Gitea data is stored in the `./gitea` directory on your host machine.
 -   PostgreSQL data is stored in the `./postgres` directory on your host machine.
+-   Runner data is stored in the `./runner` directory on your host machine.
 
 ## Stopping the Services
 
@@ -58,10 +86,3 @@ To stop and remove volumes (deletes all data):
 docker-compose down -v
 ```
 
-## Accessing Gitea via SSH
-
-To clone/push via SSH, you'll use port 2222:
-
-```bash
-git clone ssh://git@localhost:2222/your-user/your-repo.git
-```
