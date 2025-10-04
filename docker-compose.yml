@@ -16,13 +16,12 @@ services:
       - GITEA__server__DOMAIN=localhost
       - GITEA__server__ROOT_URL=https://localhost:3000/
       - GITEA__server__DISABLE_SSH=true
+      - TZ=America/Chicago
     restart: always
     volumes:
       - ./gitea:/data
       - ./cert.pem:/data/cert.pem:ro
       - ./key.pem:/data/key.pem:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
     ports:
       - "3000:3000"
     depends_on:
