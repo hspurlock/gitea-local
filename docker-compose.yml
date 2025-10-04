@@ -35,7 +35,7 @@ services:
     restart: always
     volumes:
       - ./runner:/data
-      - /run/podman/podman.sock:/var/run/docker.sock
+      - ${PODMAN_SOCKET}:/var/run/docker.sock
       - ./cert.pem:/usr/local/share/ca-certificates/gitea.crt:ro
       - ./cert.pem:/etc/ssl/certs/gitea.crt:ro
       - ./runner-config.yaml:/data/config.yaml:ro
@@ -48,6 +48,7 @@ services:
       - NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/gitea.crt
       - CURL_CA_BUNDLE=/usr/local/share/ca-certificates/gitea.crt
       - PWD=${PWD}
+      - DOCKER_HOST=${DOCKER_HOST:-unix:///var/run/docker.sock}
     depends_on:
       - gitea
     networks:

@@ -60,15 +60,23 @@ To enable CI/CD with Gitea Actions, you need to register the runner:
 2.  **Generate a runner registration token:**
     Navigate to `Site Administration` → `Actions` → `Runners` and click "Create new Runner". Copy the registration token.
 
-3.  **Create a `.env` file with the token:**
+3.  **Create a `.env` file with the token and Podman socket path:**
     ```bash
     cp .env.example .env
     ```
 
-    Edit `.env` and replace `your_registration_token_here` with your actual token:
+    Edit `.env` and configure:
     ```
     GITEA_RUNNER_TOKEN=your-actual-token-here
+    PODMAN_SOCKET=/path/to/your/podman.sock
     ```
+
+    **For macOS Podman Desktop users:**
+    Find your Podman socket path with:
+    ```bash
+    podman machine inspect | grep -i connectionuri
+    ```
+    The path will look like `/var/folders/xx/xxxxxxxxxx/T/podman/podman.sock`
 
 4.  **Restart the services:**
     ```bash
