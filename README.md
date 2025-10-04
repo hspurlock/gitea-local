@@ -1,11 +1,11 @@
-# Local Gitea Setup with Docker Compose
+# Local Gitea Setup with Podman Compose
 
 This setup runs Gitea with HTTPS enabled and a PostgreSQL database.
 
 ## Prerequisites
 
-- Docker
-- Docker Compose
+- Podman
+- Podman Compose
 
 ## How to Run
 
@@ -23,7 +23,7 @@ This setup runs Gitea with HTTPS enabled and a PostgreSQL database.
 
 4.  **Start the services:**
     ```bash
-    docker-compose up -d
+    podman-compose up -d
     ```
 
 5.  **Access Gitea:**
@@ -61,7 +61,7 @@ To enable CI/CD with Gitea Actions, you need to register the runner:
 
 4.  **Restart the services:**
     ```bash
-    docker-compose up -d
+    podman-compose up -d
     ```
 
 The runner will automatically register and start accepting jobs.
@@ -77,12 +77,12 @@ The runner will automatically register and start accepting jobs.
 To stop the services:
 
 ```bash
-docker-compose down
+podman-compose down
 ```
 
 To stop and remove volumes (deletes all data):
 
 ```bash
-docker-compose down -v
+podman-compose down -v
 ```
 
