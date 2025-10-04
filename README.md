@@ -18,8 +18,12 @@ This setup runs Gitea with HTTPS enabled and a PostgreSQL database.
 
 3.  **Generate SSL certificates (if you don't have them):**
     ```bash
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN=localhost"
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes \
+      -subj "/CN=gitea" \
+      -addext "subjectAltName=DNS:gitea,DNS:localhost,IP:127.0.0.1"
     ```
+
+    This certificate is valid for the hostname `gitea`, `localhost`, and `127.0.0.1`. You can add `gitea` to your `/etc/hosts` file to point it to any IP address.
 
 4.  **Start the services:**
     ```bash
