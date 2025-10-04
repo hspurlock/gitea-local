@@ -4,8 +4,10 @@ This setup runs Gitea with HTTPS enabled and a PostgreSQL database.
 
 ## Prerequisites
 
-- Podman
+- Podman Desktop (macOS) or Podman (Linux)
 - Podman Compose
+
+**Note for macOS users:** This setup is designed for Podman Desktop on macOS. The runner configuration automatically handles certificate mounting for CI/CD job containers.
 
 ## How to Run
 
@@ -74,7 +76,10 @@ To enable CI/CD with Gitea Actions, you need to register the runner:
     podman-compose up -d
     ```
 
-The runner will automatically register and start accepting jobs. The runner is configured to trust the self-signed certificate used by Gitea.
+The runner will automatically register and start accepting jobs. The runner is configured to:
+- Trust the self-signed certificate when communicating with Gitea
+- Mount the certificate into CI/CD job containers so they can also make HTTPS requests to Gitea
+- Work with Podman's socket for container management
 
 ## Data Persistence
 

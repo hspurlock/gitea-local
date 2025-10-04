@@ -1,0 +1,18 @@
+log:
+  level: info
+
+runner:
+  name: podman-runner
+  fetch_timeout: 5s
+  fetch_interval: 2s
+
+container:
+  network_mode: bridge
+  privileged: false
+  options: -v ${PWD}/cert.pem:/etc/ssl/certs/gitea.crt:ro
+  valid_volumes:
+    - ${PWD}/cert.pem
+  docker_host: unix:///var/run/docker.sock
+
+host:
+  workdir_parent: /tmp/actions

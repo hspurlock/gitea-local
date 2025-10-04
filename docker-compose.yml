@@ -37,11 +37,17 @@ services:
       - ./runner:/data
       - /run/podman/podman.sock:/var/run/docker.sock
       - ./cert.pem:/usr/local/share/ca-certificates/gitea.crt:ro
+      - ./cert.pem:/etc/ssl/certs/gitea.crt:ro
+      - ./runner-config.yaml:/data/config.yaml:ro
+      - ./cert.pem:${PWD}/cert.pem:ro
     environment:
       - GITEA_INSTANCE_URL=https://gitea:3000
       - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_TOKEN}
       - GITEA_RUNNER_NAME=podman-runner
       - SSL_CERT_FILE=/usr/local/share/ca-certificates/gitea.crt
+      - NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/gitea.crt
+      - CURL_CA_BUNDLE=/usr/local/share/ca-certificates/gitea.crt
+      - PWD=${PWD}
     depends_on:
       - gitea
     networks:
